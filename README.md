@@ -120,6 +120,19 @@ mvn spring-boot:run
 
 ## Endpoints REST
 
+| Metodo | Ruta | Auth | Descripcion |
+|---|---|---|---|
+| `POST` | `/auth/register` | No | Registra un nuevo usuario. |
+| `POST` | `/auth/login` | No | Autentica y retorna un JWT. |
+| `GET` | `/auth/me` | JWT | Retorna el perfil del usuario autenticado. |
+
+### Ejemplo: login
+```bash
+curl -X POST http://localhost:8081/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"juan@raceflow.com","password":"secret123"}'
+```
+
 ---
 
 ## Pruebas y calidad
