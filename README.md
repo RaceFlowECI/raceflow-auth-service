@@ -57,6 +57,32 @@
 
 ## Estructura del proyecto
 
+```text
+raceflow-auth-service/
+├── .github/workflows/
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── pom.xml
+└── src/main/java/edu/eci/arsw/raceflow/auth/
+    ├── AuthApplication.java
+    ├── config/
+    │   └── SecurityConfig.java
+    ├── controller/
+    │   └── AuthController.java
+    ├── dto/
+    │   ├── LoginRequest.java
+    │   ├── RegisterRequest.java
+    │   └── AuthResponse.java
+    ├── model/
+    │   └── User.java
+    ├── repository/
+    │   └── UserRepository.java
+    └── service/
+        ├── AuthService.java
+        └── JwtService.java
+```
+
 ---
 
 ## Configuracion local
