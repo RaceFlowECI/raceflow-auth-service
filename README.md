@@ -87,6 +87,35 @@ raceflow-auth-service/
 
 ## Configuracion local
 
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/RaceFlowECI/raceflow-auth-service.git
+cd raceflow-auth-service
+```
+
+### 2. Compilar
+```bash
+mvn clean install
+```
+
+### 3. Configurar variables de entorno
+```bash
+cp .env.example .env
+```
+```env
+DB_HOST=localhost
+DB_USER=raceflow
+DB_PASSWORD=secret
+JWT_SECRET=raceflow-dev-secret-key-for-local-dev-only-32chars
+```
+
+### 4. Ejecutar
+```bash
+mvn spring-boot:run
+```
+> [!TIP]
+> El servicio arranca en `http://localhost:8081`. Requiere PostgreSQL en localhost:5432.
+
 ---
 
 ## Endpoints REST
