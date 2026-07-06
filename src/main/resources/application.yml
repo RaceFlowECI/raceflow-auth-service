@@ -4,8 +4,6 @@ server:
 spring:
   application:
     name: raceflow-auth-service
-
-spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:5432/auth
     username: ${DB_USER:raceflow}
@@ -13,8 +11,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
 jwt:
   secret: ${JWT_SECRET:raceflow-dev-secret-key-for-local-dev-only-32chars}
   expiration: 86400000
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: local
