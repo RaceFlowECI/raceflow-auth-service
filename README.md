@@ -15,6 +15,8 @@
 - [Endpoints REST](#endpoints-rest)
 - [Pruebas y calidad](#pruebas-y-calidad)
 - [CI/CD](#cicd)
+- [Observabilidad](#observabilidad)
+- [Logs estructurados](#logs-estructurados)
 
 ---
 
@@ -150,3 +152,61 @@ mvn clean test jacoco:report
 | Puerto | 8081 |
 | Plataforma | _por definir_ |
 | Ultima version | ![CI](https://github.com/RaceFlowECI/raceflow-auth-service/actions/workflows/ci.yml/badge.svg) |
+
+---
+
+## Observabilidad
+
+### Endpoint de métricas
+```
+GET http://localhost:8081/actuator/prometheus
+```
+También disponibles: `/actuator/health`, `/actuator/info`, `/actuator/metrics`.
+
+### Métricas de negocio
+
+| Métrica | Tipo | Descripcion |
+|---|---|---|
+| `raceflow_auth_registrations_total` | Counter | Registros de usuario exitosos |
+| `raceflow_auth_login_failures_total` | Counter | Intentos de login fallidos |
+| `raceflow_auth_active_tokens` | Gauge | Tokens JWT activos actualmente |
+
+
+### Verificación local
+```bash
+# Con el servicio corriendo:
+curl -s http://localhost:8081/actuator/prometheus | grep raceflow_
+```
+
+> [!NOTE]
+> Micrometer convierte puntos a guiones bajos: `raceflow.rooms.created` → `raceflow_rooms_created_total` en Prometheus.
+
+---
+
+## Logs estructurados
+
+Los logs se emiten en formato **JSON (Logstash)** tanto a consola como a archivo, lo que permite ingestión directa por Promtail → Loki.
+
+### Archivos generados
+```
+logs/<nombre-servicio>.log               ← archivo activo
+logs/<nombre-servicio>.2026-07-05.log    ← rotado por fecha (retención 7 días)
+```
+
+### Estructura de un log entry
+```json
+{
+  "@timestamp": "2026-07-05T10:00:00.000-05:00",
+  "@version":   "1",
+  "message":    "User registered successfully",
+  "logger_name":"edu.eci.arsw.raceflow.auth.service.AuthService",
+  "thread_name":"http-nio-8081-exec-1",
+  "level":      "INFO",
+  "level_value": 20000
+}
+```
+
+### Consulta en Loki (LogQL)
+```logql
+{service="raceflow-auth-service"} | json | level="ERROR"
+```
