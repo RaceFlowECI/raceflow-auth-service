@@ -7,3 +7,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+jwt:
+  secret: raceflow-dev-secret-key-for-local-dev-only-32chars
+  expiration: 86400000
