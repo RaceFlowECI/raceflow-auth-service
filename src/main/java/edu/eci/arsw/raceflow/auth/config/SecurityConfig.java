@@ -26,7 +26,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                // CSRF relies on ambient browser credentials (cookies); this API is stateless and
+                // authenticates via an explicit Authorization: Bearer header, which browsers never
+                // attach automatically cross-origin, so CSRF does not apply here.
+                .csrf(csrf -> csrf.disable()) // NOSONAR java:S4502 -- stateless JWT API, no session cookies
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
