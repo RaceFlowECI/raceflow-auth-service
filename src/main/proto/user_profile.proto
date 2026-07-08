@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "edu.eci.arsw.raceflow.auth.grpc";
+option java_outer_classname = "UserProfileProto";
+
+// Internal contract consumed only by other RaceFlow microservices (e.g.
+// realtime-service), never by the frontend. Lets a room service resolve the
+// authoritative name/sport for an athlete instead of trusting client input.
+service UserProfileService {
+  rpc GetProfile (ProfileRequest) returns (ProfileResponse);
+}
+
+message ProfileRequest {
+  string email = 1;
+}
+
+message ProfileResponse {
+  bool found = 1;
+  string email = 2;
+  string name = 3;
+  string sport = 4;
+}
