@@ -1,5 +1,7 @@
 # RACEFLOW — Auth Service
 
+![Build](https://github.com/RaceFlowECI/raceflow-auth-service/actions/workflows/build.yml/badge.svg)
+
 > [!IMPORTANT]
 > Este repositorio contiene el **Auth Service** de RaceFlow: autenticacion JWT y gestion de usuarios.
 
