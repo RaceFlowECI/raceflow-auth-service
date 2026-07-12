@@ -24,16 +24,29 @@ class JwtServiceTest {
 
     @Test
     void generateTokenIsValidAndCarriesTheSubject() {
-        String token = jwtService.generateToken("juan@raceflow.dev");
+        String token = jwtService.generateToken("juan@raceflow.dev", "Juan");
 
         assertThat(jwtService.isTokenValid(token)).isTrue();
         assertThat(jwtService.extractEmail(token)).isEqualTo("juan@raceflow.dev");
     }
 
     @Test
+    void generateTokenCarriesTheNameClaim() {
+        String token = jwtService.generateToken("juan@raceflow.dev", "Juan Pérez");
+
+        SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+        String name = Jwts.parser().verifyWith(key).build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("name", String.class);
+
+        assertThat(name).isEqualTo("Juan Pérez");
+    }
+
+    @Test
     void isTokenValidReturnsFalseForExpiredToken() {
         JwtService shortLived = new JwtService(SECRET, -1_000L);
-        String token = shortLived.generateToken("juan@raceflow.dev");
+        String token = shortLived.generateToken("juan@raceflow.dev", "Juan");
 
         assertThat(jwtService.isTokenValid(token)).isFalse();
     }
