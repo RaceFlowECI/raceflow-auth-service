@@ -51,7 +51,7 @@ class AuthServiceTest {
         req.setSport("ciclismo");
 
         when(userRepository.existsByEmail("juan@raceflow.dev")).thenReturn(false);
-        when(jwtService.generateToken("juan@raceflow.dev")).thenReturn("signed.jwt.token");
+        when(jwtService.generateToken("juan@raceflow.dev", "Juan")).thenReturn("signed.jwt.token");
 
         AuthResponse response = authService.register(req);
 
@@ -91,7 +91,7 @@ class AuthServiceTest {
         req.setPassword("secret123");
 
         when(userRepository.findByEmail("juan@raceflow.dev")).thenReturn(Optional.of(user));
-        when(jwtService.generateToken("juan@raceflow.dev")).thenReturn("signed.jwt.token");
+        when(jwtService.generateToken("juan@raceflow.dev", "Juan")).thenReturn("signed.jwt.token");
 
         AuthResponse response = authService.login(req);
 
@@ -123,7 +123,7 @@ class AuthServiceTest {
 
         assertThatThrownBy(() -> authService.login(req))
                 .isInstanceOf(BadCredentialsException.class);
-        verify(jwtService, never()).generateToken(anyString());
+        verify(jwtService, never()).generateToken(anyString(), anyString());
     }
 
     @Test

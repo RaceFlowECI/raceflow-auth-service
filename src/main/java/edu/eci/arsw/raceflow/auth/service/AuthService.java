@@ -41,7 +41,7 @@ public class AuthService {
 
         authMetrics.recordRegistration();
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail(), user.getName());
         return AuthResponse.builder()
                 .token(token)
                 .email(user.getEmail())
@@ -61,7 +61,7 @@ public class AuthService {
             throw new BadCredentialsException("Invalid email or password");
         }
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail(), user.getName());
         return AuthResponse.builder()
                 .token(token)
                 .email(user.getEmail())
