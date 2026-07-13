@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Payload to send a friend request: the target athlete's email. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

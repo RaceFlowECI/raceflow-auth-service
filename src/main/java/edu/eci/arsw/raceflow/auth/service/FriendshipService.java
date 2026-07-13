@@ -11,17 +11,27 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/** Implements the friendship lifecycle: search, request, accept/reject, and listing. */
 @Service
 public class FriendshipService {
 
     private final FriendshipRepository friendshipRepository;
     private final UserRepository userRepository;
 
+    /**
+     * @param friendshipRepository persistence for {@link Friendship} rows
+     * @param userRepository       persistence for {@link User} rows
+     */
     public FriendshipService(FriendshipRepository friendshipRepository, UserRepository userRepository) {
         this.friendshipRepository = friendshipRepository;
         this.userRepository = userRepository;
     }
 
+    /**
+     * @param query     substring matched against email or name
+     * @param selfEmail the caller's email, excluded from results
+     * @return at most 10 matching profiles
+     */
     public List<UserProfileResponse> searchUsers(String query, String selfEmail) {
         return userRepository
                 .findTop10ByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(query, query)
@@ -31,6 +41,15 @@ public class FriendshipService {
                 .toList();
     }
 
+    /**
+     * Sends a friend request. Rejects requesting oneself, an unknown target,
+     * or a duplicate request in either direction (including an existing
+     * friendship).
+     *
+     * @param selfEmail   the requester's email
+     * @param targetEmail the addressee's email
+     * @throws FriendshipException on any of the invalid cases above
+     */
     public void sendRequest(String selfEmail, String targetEmail) {
         if (selfEmail.equalsIgnoreCase(targetEmail)) {
             throw new FriendshipException("No puedes enviarte una solicitud a ti mismo");
@@ -50,16 +69,36 @@ public class FriendshipService {
                 .build());
     }
 
+    /**
+     * Accepts a pending request. Only the addressee may accept it.
+     *
+     * @param selfEmail the caller's email (must be the addressee)
+     * @param requestId the friendship request id
+     * @throws FriendshipException if the request doesn't exist, isn't
+     *         addressed to the caller, or was already answered
+     */
     public void accept(String selfEmail, Long requestId) {
         Friendship f = pendingAddressedTo(selfEmail, requestId);
         f.setStatus(Friendship.Status.ACCEPTED);
         friendshipRepository.save(f);
     }
 
+    /**
+     * Rejects (deletes) a pending request. Only the addressee may reject it.
+     *
+     * @param selfEmail the caller's email (must be the addressee)
+     * @param requestId the friendship request id
+     * @throws FriendshipException if the request doesn't exist, isn't
+     *         addressed to the caller, or was already answered
+     */
     public void reject(String selfEmail, Long requestId) {
         friendshipRepository.delete(pendingAddressedTo(selfEmail, requestId));
     }
 
+    /**
+     * @param selfEmail the caller's email
+     * @return pending requests addressed to the caller, with requester names resolved
+     */
     public List<PendingRequestResponse> pendingRequests(String selfEmail) {
         return friendshipRepository
                 .findByAddresseeEmailAndStatus(selfEmail, Friendship.Status.PENDING)
@@ -72,6 +111,10 @@ public class FriendshipService {
                 .toList();
     }
 
+    /**
+     * @param selfEmail the caller's email
+     * @return the caller's accepted friends (the other side of each friendship)
+     */
     public List<UserProfileResponse> listFriends(String selfEmail) {
         return friendshipRepository.findAcceptedInvolving(selfEmail).stream()
                 .map(f -> f.getRequesterEmail().equalsIgnoreCase(selfEmail)
@@ -82,6 +125,14 @@ public class FriendshipService {
                 .toList();
     }
 
+    /**
+     * Fetches a request and verifies it is pending and addressed to the caller.
+     *
+     * @param selfEmail expected addressee
+     * @param requestId the friendship request id
+     * @return the validated, still-pending request
+     * @throws FriendshipException if any validation fails
+     */
     private Friendship pendingAddressedTo(String selfEmail, Long requestId) {
         Friendship f = friendshipRepository.findById(requestId)
                 .orElseThrow(() -> new FriendshipException("La solicitud no existe"));

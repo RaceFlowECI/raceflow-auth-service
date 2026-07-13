@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+/** Login payload: email and plaintext password (verified against the stored BCrypt hash). */
 @Data
 public class LoginRequest {
 
