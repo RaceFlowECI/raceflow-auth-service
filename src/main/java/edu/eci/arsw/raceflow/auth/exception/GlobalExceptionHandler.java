@@ -11,29 +11,29 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/** Translates domain exceptions into consistent JSON error responses across the API. */
+/** Traduce excepciones de dominio a respuestas de error JSON consistentes en toda la API. */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /** @return 409 Conflict for a duplicate email on registration */
+    /** @return 409 Conflict para un email duplicado en el registro */
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> handleEmailExists(EmailAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody(ex.getMessage(), 409));
     }
 
-    /** @return 400 Bad Request for an invalid friendship operation */
+    /** @return 400 Bad Request para una operacion de amistad invalida */
     @ExceptionHandler(FriendshipException.class)
     public ResponseEntity<Map<String, Object>> handleFriendship(FriendshipException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody(ex.getMessage(), 400));
     }
 
-    /** @return 401 Unauthorized for a failed login attempt */
+    /** @return 401 Unauthorized para un intento de login fallido */
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorBody(ex.getMessage(), 401));
     }
 
-    /** @return 400 Bad Request with per-field messages for a failed {@code @Valid} check */
+    /** @return 400 Bad Request con mensajes por campo para una validacion {@code @Valid} fallida */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
         var fieldErrors = ex.getBindingResult().getFieldErrors().stream()

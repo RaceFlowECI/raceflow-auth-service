@@ -10,7 +10,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-/** Issues, parses, and validates HS256-signed JWTs for authentication. */
+/** Emite, analiza y valida JWTs firmados con HS256 para autenticacion. */
 @Service
 public class JwtService {
 
@@ -18,8 +18,8 @@ public class JwtService {
     private final long expirationMs;
 
     /**
-     * @param secret       HMAC signing secret (from {@code jwt.secret})
-     * @param expirationMs token lifetime in milliseconds (from {@code jwt.expiration})
+     * @param secret       secreto de firma HMAC (de {@code jwt.secret})
+     * @param expirationMs vida util del token en milisegundos (de {@code jwt.expiration})
      */
     public JwtService(
             @Value("${jwt.secret}") String secret,
@@ -29,12 +29,12 @@ public class JwtService {
     }
 
     /**
-     * Issues a signed JWT with the email as subject and the name as a custom
-     * claim (so the frontend can display it without an extra lookup).
+     * Emite un JWT firmado con el email como subject y el nombre como un claim
+     * personalizado (para que el frontend pueda mostrarlo sin una consulta extra).
      *
-     * @param email the user's email, used as the token subject
-     * @param name  the user's display name, stored as the {@code name} claim
-     * @return the compact, signed JWT
+     * @param email el email del usuario, usado como subject del token
+     * @param name  el nombre visible del usuario, almacenado como el claim {@code name}
+     * @return el JWT compacto y firmado
      */
     public String generateToken(String email, String name) {
         Date now = new Date();
@@ -49,9 +49,9 @@ public class JwtService {
     }
 
     /**
-     * @param token a signed JWT
-     * @return the token's subject (email)
-     * @throws JwtException if the token is malformed or its signature is invalid
+     * @param token un JWT firmado
+     * @return el subject del token (email)
+     * @throws JwtException si el token esta mal formado o su firma es invalida
      */
     public String extractEmail(String token) {
         return Jwts.parser()
@@ -63,8 +63,8 @@ public class JwtService {
     }
 
     /**
-     * @param token a JWT to validate
-     * @return {@code true} if the signature is valid and the token isn't expired
+     * @param token un JWT a validar
+     * @return {@code true} si la firma es valida y el token no ha expirado
      */
     public boolean isTokenValid(String token) {
         try {

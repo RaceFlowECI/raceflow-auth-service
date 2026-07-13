@@ -14,9 +14,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 /**
- * Central Spring Security configuration: stateless JWT authentication,
- * public routes for registration/login/health, and CORS for the allowed
- * frontend origins.
+ * Configuracion central de Spring Security: autenticacion JWT sin estado,
+ * rutas publicas para registro/login/health, y CORS para los origenes
+ * de frontend permitidos.
  */
 @Configuration
 @EnableWebSecurity
@@ -25,20 +25,20 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
     /**
-     * @param jwtAuthFilter filter that authenticates requests from the JWT header
+     * @param jwtAuthFilter filtro que autentica peticiones desde el encabezado JWT
      */
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
     /**
-     * Defines the HTTP security rules: disables CSRF (justified below),
-     * enables CORS, forces stateless sessions, allowlists the public auth
-     * and health routes, and requires authentication for everything else.
+     * Define las reglas de seguridad HTTP: deshabilita CSRF (justificado abajo),
+     * habilita CORS, fuerza sesiones sin estado, permite las rutas publicas de
+     * auth y health, y exige autenticacion para todo lo demas.
      *
-     * @param http the security builder provided by Spring
-     * @return the configured filter chain
-     * @throws Exception if the security configuration cannot be built
+     * @param http el builder de seguridad provisto por Spring
+     * @return la cadena de filtros configurada
+     * @throws Exception si la configuracion de seguridad no se puede construir
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,10 +60,10 @@ public class SecurityConfig {
     }
 
     /**
-     * Builds the CORS configuration applied to all routes, allowlisting the
-     * local dev origins and the production frontend on Azure Static Web Apps.
+     * Construye la configuracion de CORS aplicada a todas las rutas, permitiendo
+     * los origenes locales de desarrollo y el frontend de produccion en Azure Static Web Apps.
      *
-     * @return the CORS configuration source
+     * @return la fuente de configuracion de CORS
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

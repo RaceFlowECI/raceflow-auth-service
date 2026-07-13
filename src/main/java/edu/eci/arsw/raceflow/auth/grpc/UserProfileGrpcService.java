@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * Internal gRPC service that lets other services (namely realtime-service)
- * resolve an athlete's authoritative name/sport by email, instead of
- * trusting whatever the client sent in a REST request body.
+ * Servicio gRPC interno que permite a otros servicios (concretamente realtime-service)
+ * resolver el nombre/deporte autoritativo de un atleta por email, en vez de
+ * confiar en lo que el cliente haya enviado en el cuerpo de una peticion REST.
  */
 @Component
 public class UserProfileGrpcService extends UserProfileServiceGrpc.UserProfileServiceImplBase {
@@ -18,18 +18,18 @@ public class UserProfileGrpcService extends UserProfileServiceGrpc.UserProfileSe
     private final UserRepository userRepository;
 
     /**
-     * @param userRepository source of truth for user profiles
+     * @param userRepository fuente de verdad para los perfiles de usuario
      */
     public UserProfileGrpcService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     /**
-     * Looks up a user by email and streams back their profile, or a
-     * {@code found=false} response if no such user exists.
+     * Busca un usuario por email y envia de vuelta su perfil, o una
+     * respuesta {@code found=false} si no existe tal usuario.
      *
-     * @param request          the email to look up
-     * @param responseObserver gRPC's callback channel for the response
+     * @param request          el email a buscar
+     * @param responseObserver canal de callback de gRPC para la respuesta
      */
     @Override
     public void getProfile(ProfileRequest request, StreamObserver<ProfileResponse> responseObserver) {

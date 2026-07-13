@@ -1,6 +1,6 @@
 package edu.eci.arsw.raceflow.auth.exception;
 
-/** Thrown for any invalid friendship operation (self-request, duplicate, unauthorized answer, etc.). */
+/** Se lanza para cualquier operacion de amistad invalida (auto-solicitud, duplicada, respuesta no autorizada, etc.). */
 public class FriendshipException extends RuntimeException {
     public FriendshipException(String message) {
         super(message);

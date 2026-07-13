@@ -10,9 +10,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 /**
- * Friendship between two users, keyed by email like the rest of the system.
- * A single row represents both the request (PENDING) and, once accepted,
- * the bidirectional friendship (ACCEPTED).
+ * Amistad entre dos usuarios, identificada por email como el resto del sistema.
+ * Una sola fila representa tanto la solicitud (PENDING) como, una vez aceptada,
+ * la amistad bidireccional (ACCEPTED).
  */
 @Entity
 @Table(name = "friendships", uniqueConstraints = @UniqueConstraint(

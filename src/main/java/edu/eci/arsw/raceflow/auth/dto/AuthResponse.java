@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Response returned by registration and login: the issued JWT and basic profile. */
+/** Respuesta retornada por registro y login: el JWT emitido y el perfil basico. */
 @Data
 @Builder
 @NoArgsConstructor

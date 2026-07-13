@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Payload to send a friend request: the target athlete's email. */
+/** Payload para enviar una solicitud de amistad: el email del atleta destino. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Public profile of an athlete, used for {@code /auth/me} and friend listings/search. */
+/** Perfil publico de un atleta, usado para {@code /auth/me} y listados/busqueda de amigos. */
 @Data
 @Builder
 @NoArgsConstructor

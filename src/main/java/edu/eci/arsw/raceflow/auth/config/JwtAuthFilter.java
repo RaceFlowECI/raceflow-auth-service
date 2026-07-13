@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Servlet filter that authenticates each request by reading and validating
- * the JWT from the {@code Authorization: Bearer} header. On success, it
- * populates the Spring Security context with the token's subject (email) so
- * downstream controllers can resolve the authenticated user.
+ * Filtro de servlet que autentica cada peticion leyendo y validando
+ * el JWT del encabezado {@code Authorization: Bearer}. Si es exitoso,
+ * llena el contexto de Spring Security con el subject del token (email) para
+ * que los controladores puedan resolver el usuario autenticado.
  */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -26,21 +26,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     /**
-     * @param jwtService service used to validate tokens and extract claims
+     * @param jwtService servicio usado para validar tokens y extraer claims
      */
     public JwtAuthFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
 
     /**
-     * Extracts and validates the bearer token, if present, and authenticates
-     * the request accordingly before continuing the filter chain. Requests
-     * without a valid token simply proceed unauthenticated; downstream
-     * security rules decide whether that is acceptable for the given route.
+     * Extrae y valida el token bearer, si esta presente, y autentica
+     * la peticion correspondientemente antes de continuar la cadena de filtros.
+     * Las peticiones sin un token valido simplemente continuan sin autenticar;
+     * las reglas de seguridad posteriores deciden si eso es aceptable para la ruta.
      *
-     * @param request     the incoming HTTP request
-     * @param response    the outgoing HTTP response
-     * @param filterChain the remaining filter chain to invoke
+     * @param request     la peticion HTTP entrante
+     * @param response    la respuesta HTTP saliente
+     * @param filterChain la cadena de filtros restante a invocar
      */
     @Override
     protected void doFilterInternal(

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** A friend request pending the caller's response, with the requester's resolved name. */
+/** Una solicitud de amistad pendiente de respuesta, con el nombre del solicitante resuelto. */
 @Data
 @Builder
 @NoArgsConstructor

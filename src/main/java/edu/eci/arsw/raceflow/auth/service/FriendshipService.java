@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/** Implements the friendship lifecycle: search, request, accept/reject, and listing. */
+/** Implementa el ciclo de vida de amistades: buscar, solicitar, aceptar/rechazar, y listar. */
 @Service
 public class FriendshipService {
 
@@ -19,8 +19,8 @@ public class FriendshipService {
     private final UserRepository userRepository;
 
     /**
-     * @param friendshipRepository persistence for {@link Friendship} rows
-     * @param userRepository       persistence for {@link User} rows
+     * @param friendshipRepository persistencia para filas de {@link Friendship}
+     * @param userRepository       persistencia para filas de {@link User}
      */
     public FriendshipService(FriendshipRepository friendshipRepository, UserRepository userRepository) {
         this.friendshipRepository = friendshipRepository;
@@ -28,9 +28,9 @@ public class FriendshipService {
     }
 
     /**
-     * @param query     substring matched against email or name
-     * @param selfEmail the caller's email, excluded from results
-     * @return at most 10 matching profiles
+     * @param query     subcadena comparada contra email o nombre
+     * @param selfEmail el email del solicitante, excluido de los resultados
+     * @return maximo 10 perfiles que coinciden
      */
     public List<UserProfileResponse> searchUsers(String query, String selfEmail) {
         return userRepository
@@ -42,13 +42,13 @@ public class FriendshipService {
     }
 
     /**
-     * Sends a friend request. Rejects requesting oneself, an unknown target,
-     * or a duplicate request in either direction (including an existing
-     * friendship).
+     * Envia una solicitud de amistad. Rechaza auto-solicitarse, un destino
+     * desconocido, o una solicitud duplicada en cualquier direccion (incluyendo una
+     * amistad ya existente).
      *
-     * @param selfEmail   the requester's email
-     * @param targetEmail the addressee's email
-     * @throws FriendshipException on any of the invalid cases above
+     * @param selfEmail   el email del solicitante
+     * @param targetEmail el email del destinatario
+     * @throws FriendshipException en cualquiera de los casos invalidos anteriores
      */
     public void sendRequest(String selfEmail, String targetEmail) {
         if (selfEmail.equalsIgnoreCase(targetEmail)) {
@@ -70,10 +70,10 @@ public class FriendshipService {
     }
 
     /**
-     * Accepts a pending request. Only the addressee may accept it.
+     * Acepta una solicitud pendiente. Solo el destinatario puede aceptarla.
      *
-     * @param selfEmail the caller's email (must be the addressee)
-     * @param requestId the friendship request id
+     * @param selfEmail el email del solicitante (debe ser el destinatario)
+     * @param requestId el id de la solicitud de amistad
      * @throws FriendshipException if the request doesn't exist, isn't
      *         addressed to the caller, or was already answered
      */
@@ -84,10 +84,10 @@ public class FriendshipService {
     }
 
     /**
-     * Rejects (deletes) a pending request. Only the addressee may reject it.
+     * Rechaza (elimina) una solicitud pendiente. Solo el destinatario puede rechazarla.
      *
-     * @param selfEmail the caller's email (must be the addressee)
-     * @param requestId the friendship request id
+     * @param selfEmail el email del solicitante (debe ser el destinatario)
+     * @param requestId el id de la solicitud de amistad
      * @throws FriendshipException if the request doesn't exist, isn't
      *         addressed to the caller, or was already answered
      */
@@ -96,8 +96,8 @@ public class FriendshipService {
     }
 
     /**
-     * @param selfEmail the caller's email
-     * @return pending requests addressed to the caller, with requester names resolved
+     * @param selfEmail el email del solicitante
+     * @return solicitudes pendientes dirigidas al solicitante, con los nombres de los solicitantes resueltos
      */
     public List<PendingRequestResponse> pendingRequests(String selfEmail) {
         return friendshipRepository
@@ -112,8 +112,8 @@ public class FriendshipService {
     }
 
     /**
-     * @param selfEmail the caller's email
-     * @return the caller's accepted friends (the other side of each friendship)
+     * @param selfEmail el email del solicitante
+     * @return los amigos aceptados del solicitante (el otro lado de cada amistad)
      */
     public List<UserProfileResponse> listFriends(String selfEmail) {
         return friendshipRepository.findAcceptedInvolving(selfEmail).stream()
@@ -126,12 +126,12 @@ public class FriendshipService {
     }
 
     /**
-     * Fetches a request and verifies it is pending and addressed to the caller.
+     * Obtiene una solicitud y verifica que este pendiente y dirigida al solicitante.
      *
-     * @param selfEmail expected addressee
-     * @param requestId the friendship request id
-     * @return the validated, still-pending request
-     * @throws FriendshipException if any validation fails
+     * @param selfEmail destinatario esperado
+     * @param requestId el id de la solicitud de amistad
+     * @return la solicitud validada, aun pendiente
+     * @throws FriendshipException si alguna validacion falla
      */
     private Friendship pendingAddressedTo(String selfEmail, Long requestId) {
         Friendship f = friendshipRepository.findById(requestId)

@@ -12,8 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * REST endpoints for registration, login, and the authenticated user's own
- * profile.
+ * Endpoints REST para registro, login, y el perfil propio del usuario autenticado.
  */
 @RestController
 @RequestMapping("/auth")
@@ -22,17 +21,17 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     * @param authService service implementing the registration/login logic
+     * @param authService servicio que implementa la logica de registro/login
      */
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
     /**
-     * Registers a new athlete.
+     * Registra un nuevo atleta.
      *
-     * @param req email, password, name, and optional sport
-     * @return {@code 201 Created} with the issued JWT and basic profile
+     * @param req email, contrasena, nombre y deporte opcional
+     * @return {@code 201 Created} con el JWT emitido y el perfil basico
      */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest req) {
@@ -40,10 +39,10 @@ public class AuthController {
     }
 
     /**
-     * Authenticates an existing athlete.
+     * Autentica a un atleta existente.
      *
-     * @param req email and password
-     * @return {@code 200 OK} with a fresh JWT and basic profile
+     * @param req email y contrasena
+     * @return {@code 200 OK} con un nuevo JWT y el perfil basico
      */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest req) {
@@ -51,10 +50,10 @@ public class AuthController {
     }
 
     /**
-     * Returns the profile of the currently authenticated athlete, resolved
-     * from the JWT subject set by {@link edu.eci.arsw.raceflow.auth.config.JwtAuthFilter}.
+     * Retorna el perfil del atleta actualmente autenticado, resuelto
+     * a partir del subject del JWT establecido por {@link edu.eci.arsw.raceflow.auth.config.JwtAuthFilter}.
      *
-     * @return the caller's profile
+     * @return el perfil del solicitante
      */
     @GetMapping("/me")
     public ResponseEntity<UserProfileResponse> me() {

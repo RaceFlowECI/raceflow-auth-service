@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * REST endpoints for the friendship lifecycle: search, request, accept,
- * reject, and list friends. All routes act on the authenticated caller,
- * resolved from the JWT subject.
+ * Endpoints REST para el ciclo de vida de amistades: buscar, solicitar, aceptar,
+ * rechazar, y listar amigos. Todas las rutas actuan sobre el solicitante autenticado,
+ * resuelto a partir del subject del JWT.
  */
 @RestController
 @RequestMapping("/friends")
@@ -24,16 +24,16 @@ public class FriendController {
     private final FriendshipService friendshipService;
 
     /**
-     * @param friendshipService service implementing the friendship lifecycle
+     * @param friendshipService servicio que implementa el ciclo de vida de amistades
      */
     public FriendController(FriendshipService friendshipService) {
         this.friendshipService = friendshipService;
     }
 
     /**
-     * Lists the caller's accepted friends.
+     * Lista los amigos aceptados del solicitante.
      *
-     * @return the caller's friend list
+     * @return la lista de amigos del solicitante
      */
     @GetMapping
     public ResponseEntity<List<UserProfileResponse>> myFriends() {
@@ -41,10 +41,10 @@ public class FriendController {
     }
 
     /**
-     * Searches athletes by name or email, excluding the caller.
+     * Busca atletas por nombre o email, excluyendo al solicitante.
      *
-     * @param query free-text search term
-     * @return matching profiles (at most 10)
+     * @param query termino de busqueda libre
+     * @return perfiles que coinciden (maximo 10)
      */
     @GetMapping("/search")
     public ResponseEntity<List<UserProfileResponse>> search(@RequestParam("q") String query) {
@@ -52,9 +52,9 @@ public class FriendController {
     }
 
     /**
-     * Lists friend requests addressed to the caller that are still pending.
+     * Lista las solicitudes de amistad dirigidas al solicitante que siguen pendientes.
      *
-     * @return pending requests with the requester's name
+     * @return solicitudes pendientes con el nombre del solicitante original
      */
     @GetMapping("/requests")
     public ResponseEntity<List<PendingRequestResponse>> pending() {
@@ -62,10 +62,10 @@ public class FriendController {
     }
 
     /**
-     * Sends a friend request from the caller to the given email.
+     * Envia una solicitud de amistad del solicitante al email dado.
      *
-     * @param dto the target athlete's email
-     * @return {@code 201 Created} on success
+     * @param dto el email del atleta destino
+     * @return {@code 201 Created} si tiene exito
      */
     @PostMapping("/requests")
     public ResponseEntity<Void> sendRequest(@Valid @RequestBody FriendRequestDto dto) {
@@ -74,10 +74,10 @@ public class FriendController {
     }
 
     /**
-     * Accepts a pending friend request addressed to the caller.
+     * Acepta una solicitud de amistad pendiente dirigida al solicitante.
      *
-     * @param id the friendship request id
-     * @return {@code 204 No Content} on success
+     * @param id el id de la solicitud de amistad
+     * @return {@code 204 No Content} si tiene exito
      */
     @PostMapping("/requests/{id}/accept")
     public ResponseEntity<Void> accept(@PathVariable Long id) {
@@ -86,10 +86,10 @@ public class FriendController {
     }
 
     /**
-     * Rejects (deletes) a pending friend request addressed to the caller.
+     * Rechaza (elimina) una solicitud de amistad pendiente dirigida al solicitante.
      *
-     * @param id the friendship request id
-     * @return {@code 204 No Content} on success
+     * @param id el id de la solicitud de amistad
+     * @return {@code 204 No Content} si tiene exito
      */
     @DeleteMapping("/requests/{id}")
     public ResponseEntity<Void> reject(@PathVariable Long id) {
@@ -98,7 +98,7 @@ public class FriendController {
     }
 
     /**
-     * @return the authenticated caller's email, from the JWT subject
+     * @return el email del solicitante autenticado, desde el subject del JWT
      */
     private String self() {
         return SecurityContextHolder.getContext().getAuthentication().getName();

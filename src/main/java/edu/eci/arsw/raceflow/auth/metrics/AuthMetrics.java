@@ -4,7 +4,7 @@ import io.micrometer.core.instrument.*;
 import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/** Micrometer counters/gauges for auth-service, exposed at {@code /actuator/prometheus}. */
+/** Contadores/gauges de Micrometer para auth-service, expuestos en {@code /actuator/prometheus}. */
 @Component
 public class AuthMetrics {
 
@@ -13,7 +13,7 @@ public class AuthMetrics {
     private final AtomicInteger activeTokens = new AtomicInteger(0);
 
     /**
-     * @param registry the Micrometer registry to bind these meters to
+     * @param registry el registro de Micrometer al que se enlazan estos meters
      */
     public AuthMetrics(MeterRegistry registry) {
         this.registrations = Counter.builder("raceflow.auth.registrations")
@@ -29,12 +29,12 @@ public class AuthMetrics {
                 .register(registry);
     }
 
-    /** Increments the total registrations counter. */
+    /** Incrementa el contador total de registros. */
     public void recordRegistration() { registrations.increment(); }
-    /** Increments the total failed-login counter. */
+    /** Incrementa el contador total de logins fallidos. */
     public void recordLoginFailure() { loginFailures.increment(); }
-    /** Increments the active-tokens gauge. */
+    /** Incrementa el gauge de tokens activos. */
     public void incrementActiveTokens() { activeTokens.incrementAndGet(); }
-    /** Decrements the active-tokens gauge. */
+    /** Decrementa el gauge de tokens activos. */
     public void decrementActiveTokens() { activeTokens.decrementAndGet(); }
 }

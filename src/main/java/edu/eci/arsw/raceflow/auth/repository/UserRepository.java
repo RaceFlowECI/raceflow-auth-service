@@ -6,28 +6,28 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-/** Spring Data repository for {@link User} rows. */
+/** Repositorio Spring Data para filas de {@link User}. */
 public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
-     * @param email the email to look up
-     * @return the matching user, if any
+     * @param email el email a buscar
+     * @return el usuario encontrado, si existe
      */
     Optional<User> findByEmail(String email);
 
     /**
-     * Case-insensitive search by email or name substring, used by the
-     * friend-search endpoint.
+     * Busqueda sin distincion de mayusculas por subcadena de email o nombre, usada por
+     * el endpoint de busqueda de amigos.
      *
-     * @param email substring matched against email
-     * @param name  substring matched against name (same value as {@code email})
-     * @return at most 10 matches
+     * @param email subcadena comparada contra el email
+     * @param name  subcadena comparada contra el nombre (mismo valor que {@code email})
+     * @return maximo 10 coincidencias
      */
     List<User> findTop10ByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(String email, String name);
 
     /**
-     * @param email the email to check
-     * @return {@code true} if a user with that email is already registered
+     * @param email el email a verificar
+     * @return {@code true} si ya existe un usuario registrado con ese email
      */
     boolean existsByEmail(String email);
 }

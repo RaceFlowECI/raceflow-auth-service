@@ -4,17 +4,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Entry point of the Auth Service. Handles user registration, login, JWT
- * issuance, friendships, and exposes the internal gRPC UserProfileService
- * consumed by realtime-service.
+ * Punto de entrada del Auth Service. Maneja el registro de usuarios, login,
+ * emision de JWT, amistades, y expone el servicio gRPC interno UserProfileService
+ * que consume realtime-service.
  */
 @SpringBootApplication
 public class AuthApplication {
 
     /**
-     * Boots the Spring application context.
+     * Arranca el contexto de la aplicacion Spring.
      *
-     * @param args command-line arguments passed to Spring Boot
+     * @param args argumentos de linea de comandos pasados a Spring Boot
      */
     public static void main(String[] args) {
         SpringApplication.run(AuthApplication.class, args);

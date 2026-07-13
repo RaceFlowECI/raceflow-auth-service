@@ -12,7 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/** Implements registration and login: password hashing, JWT issuance, and metrics. */
+/** Implementa registro y login: hash de contrasena, emision de JWT, y metricas. */
 @Service
 public class AuthService {
 
@@ -22,9 +22,9 @@ public class AuthService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
-     * @param userRepository persistence for {@link User} rows
-     * @param jwtService     issues and validates JWTs
-     * @param authMetrics    records registration/login counters
+     * @param userRepository persistencia para filas de {@link User}
+     * @param jwtService     emite y valida JWTs
+     * @param authMetrics    registra contadores de registro/login
      */
     public AuthService(UserRepository userRepository, JwtService jwtService, AuthMetrics authMetrics) {
         this.userRepository = userRepository;
@@ -33,12 +33,12 @@ public class AuthService {
     }
 
     /**
-     * Registers a new user: hashes the password with BCrypt, persists the
-     * user, and issues a JWT.
+     * Registra un nuevo usuario: aplica hash BCrypt a la contrasena, persiste
+     * el usuario, y emite un JWT.
      *
-     * @param req registration payload
-     * @return the issued token and basic profile
-     * @throws EmailAlreadyExistsException if the email is already registered
+     * @param req payload de registro
+     * @return el token emitido y el perfil basico
+     * @throws EmailAlreadyExistsException si el email ya esta registrado
      */
     public AuthResponse register(RegisterRequest req) {
         if (userRepository.existsByEmail(req.getEmail())) {
@@ -64,13 +64,13 @@ public class AuthService {
     }
 
     /**
-     * Authenticates a user by verifying the password against the stored
-     * BCrypt hash, and issues a fresh JWT on success.
+     * Autentica a un usuario verificando la contrasena contra el hash
+     * BCrypt almacenado, y emite un nuevo JWT si tiene exito.
      *
-     * @param req login payload
-     * @return the issued token and basic profile
+     * @param req payload de login
+     * @return el token emitido y el perfil basico
      * @throws org.springframework.security.authentication.BadCredentialsException
-     *         if the email is unknown or the password does not match
+     *         si el email es desconocido o la contrasena no coincide
      */
     public AuthResponse login(LoginRequest req) {
         User user = userRepository.findByEmail(req.getEmail())
@@ -93,8 +93,8 @@ public class AuthService {
     }
 
     /**
-     * @param email the authenticated caller's email (from the JWT subject)
-     * @return the caller's profile
+     * @param email el email del solicitante autenticado (del subject del JWT)
+     * @return el perfil del solicitante
      */
     public UserProfileResponse me(String email) {
         User user = userRepository.findByEmail(email)
