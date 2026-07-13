@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/** A registered athlete: credentials plus the profile data other services resolve by email. */
 @Entity
 @Table(name = "users")
 @Data

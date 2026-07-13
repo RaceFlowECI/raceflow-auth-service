@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/** Registration payload: credentials, display name, and an optional sport. */
 @Data
 public class RegisterRequest {
 
