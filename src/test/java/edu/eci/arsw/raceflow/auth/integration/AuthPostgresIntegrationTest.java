@@ -37,6 +37,10 @@ class AuthPostgresIntegrationTest {
 
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
+        // src/test/resources/application.yml hardcodes the H2 driver for the rest of the
+        // (fast, brokerless) suite -- override it here too, not just the URL, or Hibernate
+        // tries to speak H2's dialect over a Postgres connection and fails to boot.
+        registry.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
