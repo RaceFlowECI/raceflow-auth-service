@@ -44,6 +44,12 @@ class AuthPostgresIntegrationTest {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+
+        // This test's @DynamicPropertySource forces a fresh (non-cached) Spring context,
+        // which can run concurrently in the same JVM as AuthApplicationTests' context --
+        // both would otherwise try to bind GrpcServerLifecycle's gRPC server to the same
+        // fixed port 9090 and fail with "Address already in use".
+        registry.add("grpc.server.port", () -> "9091");
     }
 
     @Autowired
