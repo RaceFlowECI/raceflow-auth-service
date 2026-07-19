@@ -9,29 +9,35 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-/** A registered athlete: credentials plus the profile data other services resolve by email. */
+/**
+ * Friendship between two users, keyed by email like the rest of the system.
+ * A single row represents both the request (PENDING) and, once accepted,
+ * the bidirectional friendship (ACCEPTED).
+ */
 @Entity
-@Table(name = "users")
+@Table(name = "friendships", uniqueConstraints = @UniqueConstraint(
+        columnNames = {"requesterEmail", "addresseeEmail"}))
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Friendship {
+
+    public enum Status { PENDING, ACCEPTED }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false)
+    private String requesterEmail;
 
     @Column(nullable = false)
-    private String passwordHash;
+    private String addresseeEmail;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String name;
-
-    private String sport;
+    private Status status;
 
     @CreationTimestamp
     @Column(updatable = false)

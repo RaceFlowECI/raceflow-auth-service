@@ -13,16 +13,33 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+/**
+ * Central Spring Security configuration: stateless JWT authentication,
+ * public routes for registration/login/health, and CORS for the allowed
+ * frontend origins.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
 
+    /**
+     * @param jwtAuthFilter filter that authenticates requests from the JWT header
+     */
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
+    /**
+     * Defines the HTTP security rules: disables CSRF (justified below),
+     * enables CORS, forces stateless sessions, allowlists the public auth
+     * and health routes, and requires authentication for everything else.
+     *
+     * @param http the security builder provided by Spring
+     * @return the configured filter chain
+     * @throws Exception if the security configuration cannot be built
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -42,10 +59,19 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Builds the CORS configuration applied to all routes, allowlisting the
+     * local dev origins and the production frontend on Azure Static Web Apps.
+     *
+     * @return the CORS configuration source
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000"));
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "https://lively-rock-0066b1e0f.7.azurestaticapps.net"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
