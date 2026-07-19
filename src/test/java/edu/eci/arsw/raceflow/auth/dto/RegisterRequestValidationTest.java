@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Set;
@@ -67,31 +68,16 @@ class RegisterRequestValidationTest {
         assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("password"));
     }
 
-    @Test
-    void rejectsPasswordEqualToTheFullEmail() {
+    @ParameterizedTest
+    @CsvSource({
+            "juan@raceflow.dev, juan@raceflow.dev",       // equals the full email
+            "juanperez@raceflow.dev, JuanPerez",          // equals the local part (case-insensitive)
+            "juanperez@raceflow.dev, JuanPerez!2026",     // contains the local part
+    })
+    void rejectsPasswordsThatMatchOrContainTheEmail(String email, String password) {
         RegisterRequest req = validRequest();
-        req.setEmail("juan@raceflow.dev");
-        req.setPassword("juan@raceflow.dev");
-
-        assertThat(validator.validate(req))
-                .anyMatch(v -> v.getPropertyPath().toString().equals("password"));
-    }
-
-    @Test
-    void rejectsPasswordEqualToTheEmailLocalPart() {
-        RegisterRequest req = validRequest();
-        req.setEmail("juanperez@raceflow.dev");
-        req.setPassword("JuanPerez"); // case-insensitive match against the local part
-
-        assertThat(validator.validate(req))
-                .anyMatch(v -> v.getPropertyPath().toString().equals("password"));
-    }
-
-    @Test
-    void rejectsPasswordContainingTheEmailLocalPart() {
-        RegisterRequest req = validRequest();
-        req.setEmail("juanperez@raceflow.dev");
-        req.setPassword("JuanPerez!2026");
+        req.setEmail(email);
+        req.setPassword(password);
 
         assertThat(validator.validate(req))
                 .anyMatch(v -> v.getPropertyPath().toString().equals("password"));
