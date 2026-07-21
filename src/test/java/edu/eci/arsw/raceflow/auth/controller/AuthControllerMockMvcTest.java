@@ -56,7 +56,7 @@ class AuthControllerMockMvcTest {
     void registerWithValidPayloadReturns201WithTokenAndProfile() throws Exception {
         RegisterRequest req = new RegisterRequest();
         req.setEmail("juan@raceflow.dev");
-        req.setPassword("secret123");
+        req.setPassword("Str0ng!Pass");
         req.setName("Juan");
 
         when(authService.register(any(RegisterRequest.class))).thenReturn(
@@ -76,7 +76,7 @@ class AuthControllerMockMvcTest {
     void registerWithMalformedEmailReturns400WithFieldError() throws Exception {
         RegisterRequest req = new RegisterRequest();
         req.setEmail("not-an-email");
-        req.setPassword("secret123");
+        req.setPassword("Str0ng!Pass");
         req.setName("Juan");
 
         mockMvc.perform(post("/auth/register")
@@ -92,7 +92,7 @@ class AuthControllerMockMvcTest {
     void registerWithDuplicateEmailReturns409() throws Exception {
         RegisterRequest req = new RegisterRequest();
         req.setEmail("juan@raceflow.dev");
-        req.setPassword("secret123");
+        req.setPassword("Str0ng!Pass");
         req.setName("Juan");
 
         when(authService.register(any(RegisterRequest.class)))
